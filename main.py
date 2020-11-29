@@ -2,9 +2,10 @@ import argparse
 import string
 import mmap
 import os
+from termcolor import colored
 
 
-class Foo:
+class HexEditor:
     def __init__(self, input_file: str):
         self.input_file = input_file
 
@@ -27,27 +28,28 @@ class Foo:
                 for x in range(16):
                     pre_layer += hex(mm[pointer+x])[2:].ljust(2) + " "
                     if (char := chr(mm[pointer+x])) in string.printable:
-                        layer += char
+                        layer += colored(char, "red")
                     else:
                         layer += "."
                 pointer += 16
                 yield pre_layer + " " + layer
 
+
 def main(args):
     start = 0
     buff = 20
-    foo = Foo(args.i)
-    foo.render(start, buff)
+    he = HexEditor(args.i)
+    he.render(start, buff)
 
     while 1:
         check = input("> ")
         os.system("clear")
         if check == "j":
             start -= 16
-            foo.render(start, buff)
+            he.render(start, buff)
         if check == "k":
             start += 16
-            foo.render(start, buff)
+            he.render(start, buff)
 
 
 def parse_args():
