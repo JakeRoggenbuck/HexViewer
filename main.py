@@ -27,7 +27,8 @@ class HexEditor:
                 layer = ""
                 for x in range(16):
                     pre_layer += hex(mm[pointer+x])[2:].ljust(2) + " "
-                    if (char := chr(mm[pointer+x])) in string.printable:
+                    char = chr(mm[pointer+x])
+                    if char in string.printable and char != "\n" and char != "\t":
                         layer += colored(char, "red")
                     else:
                         layer += "."
