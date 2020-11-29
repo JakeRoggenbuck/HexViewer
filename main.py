@@ -8,7 +8,7 @@ class Foo:
     def __init__(self, input_file: str):
         self.input_file = input_file
 
-    def render(self, start: int = 0, buff: int = 10):
+    def render(self, start: int, buff: int):
         self.start = start
         self.buff = buff
         self.end = start + buff
@@ -22,21 +22,23 @@ class Foo:
             pointer = self.start
 
             for layer_num in range(self.start, self.end):
+                pre_layer = ""
                 layer = ""
                 for x in range(16):
+                    pre_layer += hex(mm[pointer+x])[2:].ljust(2) + " "
                     if (char := chr(mm[pointer+x])) in string.printable:
                         layer += char
                     else:
                         layer += "."
                 pointer += 16
-                yield layer
+                yield pre_layer + " " + layer
 
 def main(args):
-    foo = Foo(args.i)
-    foo.render()
-
     start = 0
-    buff = 10
+    buff = 20
+    foo = Foo(args.i)
+    foo.render(start, buff)
+
     while 1:
         check = input("> ")
         os.system("clear")
